@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 ThemeData get lightTheme => ThemeData(
   useMaterial3: false,
-  canvasColor: Colors.transparent,
-  brightness: Brightness.light,
+  scaffoldBackgroundColor: Colors.white,
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    unselectedIconTheme: IconThemeData(color: Colors.grey),
+    selectedIconTheme: IconThemeData(color: Colors.blue),
+  ),
 );
 
 ThemeData get darkTheme => ThemeData(

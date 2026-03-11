@@ -10,8 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   # icons
   cupertino_icons: ^1.0.8
+  flutter_weather_conditions: ^1.0.1
 
   # Navigation
   go_router: ^17.0.0

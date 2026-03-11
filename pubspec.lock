@@ -147,6 +147,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_weather_conditions:
+    dependency: "direct main"
+    description:
+      name: flutter_weather_conditions
+      sha256: "3f30b57a46a8e6e7529900fe92d71cc6f958f47212e379b064ea747d71d080fc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
