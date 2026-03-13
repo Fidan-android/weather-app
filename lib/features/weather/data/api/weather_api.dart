@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:weather_app/core/network/api_service.dart';
 import 'package:weather_app/features/weather/data/dto/response/weather_response_dto.dart';
 
@@ -16,7 +15,6 @@ class WeatherApi {
       path: "/weather",
       query: {"lat": lat, "lon": lon, "units": units},
     );
-    debugPrint(response.toString());
     return WeatherResponseDto.fromJson(response);
   }
 }

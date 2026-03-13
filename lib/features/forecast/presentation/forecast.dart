@@ -14,14 +14,6 @@ class ForecastScreen extends ConsumerStatefulWidget {
 
 class _ForecastScreenState extends ConsumerState<ForecastScreen> {
   @override
-  void initState() {
-    super.initState();
-    /*WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(forecastControllerProvider.notifier).onInit();
-    });*/
-  }
-
-  @override
   Widget build(BuildContext context) {
     final forecastState = ref.watch(forecastControllerProvider);
     return _buildBody(forecastState);
@@ -33,41 +25,67 @@ class _ForecastScreenState extends ConsumerState<ForecastScreen> {
     }
 
     if (forecastState is ForecastErrorState) {
-      return Column(
-        children: [Center(child: Text(forecastState.errorMessage))],
+      return RefreshIndicator(
+        onRefresh: ref.read(forecastControllerProvider.notifier).onRefresh,
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  forecastState.errorMessage,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20, color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
       );
     }
 
     if (forecastState is ForecastDataState) {
-      return Column(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
-              child: ListView.builder(
-                itemCount: forecastState.forecastModel.listOfWeather.length,
-                itemBuilder: (ctx, index) {
-                  final weather =
-                      forecastState.forecastModel.listOfWeather[index];
-                  return _forecastBlock(weather);
-                },
+      final list = forecastState.forecastModel.listOfWeather;
+      return RefreshIndicator(
+        onRefresh: ref.read(forecastControllerProvider.notifier).onRefresh,
+        child: list.isEmpty
+            ? SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Container(child: Text("Нет прогнозов")),
+              )
+            : Column(
+                children: [
+                  Flexible(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+                      child: ListView.builder(
+                        itemCount:
+                            forecastState.forecastModel.listOfWeather.length,
+                        itemBuilder: (ctx, index) {
+                          final weather =
+                              forecastState.forecastModel.listOfWeather[index];
+                          return _forecastBlock(weather);
+                        },
+                      ),
+                    ),
+                  ),
+                  if (forecastState.isOffline)
+                    Container(
+                      width: double.infinity,
+                      color: Colors.deepOrangeAccent,
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Text(
+                          "Нет интернет-соединения",
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ),
+                    ),
+                ],
               ),
-            ),
-          ),
-          if (forecastState.isOffline)
-            Container(
-              width: double.infinity,
-              color: Colors.deepOrangeAccent,
-              padding: EdgeInsets.symmetric(vertical: 8),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Text(
-                  "Нет интернет-соединения",
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-              ),
-            ),
-        ],
       );
     }
 

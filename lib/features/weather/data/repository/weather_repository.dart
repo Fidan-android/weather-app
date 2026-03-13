@@ -29,14 +29,9 @@ class WeatherRepository implements IWeatherRepository {
     }
 
     _isOffline = false;
-    try {
-      final response = await _weatherApi.getWeather(lat, lon, unit.type);
-      await _datasource.onSaveWeather(response, unit);
-      return response.toDomain();
-    } on DioException catch (e) {
-      debugPrintStack(stackTrace: e.stackTrace);
-      throw Exception("Что-то пошло не так, попробуй позже.");
-    }
+    final response = await _weatherApi.getWeather(lat, lon, unit.type);
+    await _datasource.onSaveWeather(response, unit);
+    return response.toDomain();
   }
 
   @override

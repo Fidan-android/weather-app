@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weather_app/features/city/data/providers/city_data_provider.dart';
 import 'package:weather_app/features/forecast/data/providers/forecast_data_provider.dart';
@@ -20,6 +21,11 @@ class ForecastController extends Notifier<ForecastState> {
     return ForecastInitState();
   }
 
+  Future<void> onRefresh() async {
+    state = ForecastLoadingState();
+    await _loadForecast();
+  }
+
   Future<void> _loadForecast() async {
     final unit = ref.read(selectedUnitProvider);
     final city = ref.read(selectedCityProvider);
@@ -40,6 +46,8 @@ class ForecastController extends Notifier<ForecastState> {
         unit,
       );
       state = ForecastDataState(forecast, isOffline: repository.isOffline);
+    } on DioException catch (e) {
+      state = ForecastErrorState("Отсутствует инетрнет-соединение");
     } catch (e) {
       state = ForecastErrorState(e.toString());
     }

@@ -12,7 +12,7 @@ WeatherResponseDto _$WeatherResponseDtoFromJson(Map<String, dynamic> json) =>
           .map((e) => WeatherInfo.fromJson(e as Map<String, dynamic>))
           .toList(),
       MainInfo.fromJson(json['main'] as Map<String, dynamic>),
-      (json['visibility'] as num).toInt(),
+      (json['visibility'] as num?)?.toInt(),
       WindInfo.fromJson(json['wind'] as Map<String, dynamic>),
       json['name'] as String?,
       json['dt_txt'] as String?,

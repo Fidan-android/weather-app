@@ -15,7 +15,7 @@ class WeatherResponseDto {
   final MainInfo main;
 
   @JsonKey(name: "visibility")
-  final int visibility;
+  final int? visibility;
 
   @JsonKey(name: "wind")
   final WindInfo wind;

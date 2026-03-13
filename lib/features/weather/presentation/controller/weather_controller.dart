@@ -1,7 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weather_app/core/enums/units.dart';
 import 'package:weather_app/features/city/data/providers/city_data_provider.dart';
-import 'package:weather_app/features/city/domain/models/city_model.dart';
 import 'package:weather_app/features/weather/data/providers/weather_data_provider.dart';
 import 'package:weather_app/features/weather/presentation/state/weather_state.dart';
 
@@ -20,6 +20,11 @@ class WeatherController extends Notifier<WeatherState> {
 
     Future.microtask(_loadWeather);
     return WeatherInitState();
+  }
+
+  Future<void> onRefresh() async {
+    state = WeatherLoadingState();
+    await _loadWeather();
   }
 
   Future<void> _loadWeather() async {
@@ -45,6 +50,8 @@ class WeatherController extends Notifier<WeatherState> {
         unit: unit,
         isOffline: repository.isOffline,
       );
+    } on DioException catch (e) {
+      state = WeatherErrorState("Отсутствует инетрнет-соединение");
     } catch (e) {
       state = WeatherErrorState(e.toString());
     }

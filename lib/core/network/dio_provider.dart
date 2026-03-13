@@ -20,13 +20,6 @@ final dioProvider = Provider<Dio>((ref) {
   dio.interceptors.add(
     InterceptorsWrapper(
       onRequest: (options, handler) {
-        final buffer = StringBuffer();
-        buffer
-          ..writeln("--- chain.request ---")
-          ..writeln("type: ${options.method}")
-          ..writeln("url: ${options.path}${options.queryParameters}");
-        debugPrint(buffer.toString());
-
         options.queryParameters["appid"] = Env.weatherApiKey;
         options.queryParameters["lang"] = "ru";
         handler.next(options);

@@ -33,13 +33,8 @@ class ForecastRepository extends IForecastRepository {
     }
 
     _isOffline = false;
-    try {
-      final response = await _forecastApi.getWeather(lat, lon, unit.type);
-      await _datasource.onSaveForecast(response, unit);
-      return response.toDomain();
-    } on DioException catch (e) {
-      debugPrintStack(stackTrace: e.stackTrace);
-      throw Exception("Что-то пошло не так! Попробуй снова.");
-    }
+    final response = await _forecastApi.getWeather(lat, lon, unit.type);
+    await _datasource.onSaveForecast(response, unit);
+    return response.toDomain();
   }
 }
