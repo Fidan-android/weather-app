@@ -9,12 +9,12 @@ class CityDb {
   final countOfHistory = 5;
   List<CityDto>? _cachedCities;
 
-  SharedPreferences? _sharedPreferences;
+  SharedPreferences? _prefs;
   List<CityDto> _historyCities = [];
 
   Future _initPrefs() async {
-    if (_sharedPreferences != null) return;
-    _sharedPreferences = await SharedPreferences.getInstance();
+    if (_prefs != null) return;
+    _prefs = await SharedPreferences.getInstance();
   }
 
   Future _loadCities() async {
@@ -35,27 +35,28 @@ class CityDb {
 
   Future<List<CityDto>> onGetHistory() async {
     await _initPrefs();
-    final historyString =
-        _sharedPreferences?.getStringList(SharedKeys.history.key) ?? [];
-    _historyCities = historyString
-        .map((e) => CityDto.fromJson(jsonDecode(e)))
-        .toList();
+    if (_historyCities.isEmpty) {
+      final historyString = _prefs?.getStringList(SharedKeys.history.key) ?? [];
+      _historyCities = historyString
+          .map((e) => CityDto.fromJson(jsonDecode(e)))
+          .toList();
+    }
     return _historyCities;
   }
 
   Future onSelectCity(CityDto city) async {
-    if (_historyCities.map((e) => e.name).contains(city.name)) return;
-
     if (_historyCities.length == countOfHistory) {
       _historyCities.removeAt(0);
     }
+    if (!_historyCities.map((e) => e.name).contains(city.name)) {
+      _historyCities.add(city);
+    }
 
-    _historyCities.add(city);
-    await _sharedPreferences?.setString(
+    await _prefs?.setString(
       SharedKeys.selectedCity.key,
       jsonEncode(city.toJson()),
     );
-    await _sharedPreferences?.setStringList(
+    await _prefs?.setStringList(
       SharedKeys.history.key,
       _historyCities.map((e) => jsonEncode(e.toJson())).toList(),
     );
@@ -63,9 +64,17 @@ class CityDb {
 
   Future onRemoveCity(CityDto city) async {
     _historyCities.removeWhere((dto) => dto.name == city.name);
-    await _sharedPreferences?.setStringList(
+    await _prefs?.setStringList(
       SharedKeys.history.key,
       _historyCities.map((e) => jsonEncode(e.toJson())).toList(),
     );
+  }
+
+  Future<CityDto?> onGetSelectedCity() async {
+    await _initPrefs();
+    final jsonString = _prefs?.getString(SharedKeys.selectedCity.key) ?? "";
+    print(jsonString);
+    if (jsonString.isEmpty) return null;
+    return CityDto.fromJson(jsonDecode(jsonString));
   }
 }

@@ -30,4 +30,10 @@ class CityRepoImpl implements ICityRepo {
   Future<dynamic> onRemoveCity(CityModel cityModel) async {
     await db.onRemoveCity(CityDto.fromDomain(cityModel));
   }
+
+  @override
+  Future<CityModel?> onGetSelectedCity() async {
+    final cityDto = await db.onGetSelectedCity();
+    return cityDto?.toDomain();
+  }
 }
