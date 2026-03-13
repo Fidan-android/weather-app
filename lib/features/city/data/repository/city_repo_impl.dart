@@ -16,8 +16,8 @@ class CityRepoImpl implements ICityRepo {
   }
 
   @override
-  Future<List<CityModel>> onGetHistory() async {
-    final history = await db.onGetHistory();
+  List<CityModel> onGetHistory() {
+    final history = db.onGetHistory();
     return history.map((dto) => dto.toDomain()).toList();
   }
 
@@ -32,8 +32,8 @@ class CityRepoImpl implements ICityRepo {
   }
 
   @override
-  Future<CityModel?> onGetSelectedCity() async {
-    final cityDto = await db.onGetSelectedCity();
+  CityModel? onGetSelectedCity() {
+    final cityDto = db.onGetSelectedCity();
     return cityDto?.toDomain();
   }
 }

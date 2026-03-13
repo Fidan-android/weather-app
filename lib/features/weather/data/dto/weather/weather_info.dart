@@ -5,10 +5,10 @@ part 'weather_info.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class WeatherInfo {
-  final int id;
-  final String main;
-  final String description;
-  final String icon;
+  final int? id;
+  final String? main;
+  final String? description;
+  final String? icon;
 
   WeatherInfo(this.id, this.main, this.description, this.icon);
 

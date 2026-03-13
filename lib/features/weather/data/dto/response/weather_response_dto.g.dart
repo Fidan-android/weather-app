@@ -8,13 +8,14 @@ part of 'weather_response_dto.dart';
 
 WeatherResponseDto _$WeatherResponseDtoFromJson(Map<String, dynamic> json) =>
     WeatherResponseDto(
-      weather: (json['weather'] as List<dynamic>)
+      (json['weather'] as List<dynamic>)
           .map((e) => WeatherInfo.fromJson(e as Map<String, dynamic>))
           .toList(),
-      main: MainInfo.fromJson(json['main'] as Map<String, dynamic>),
-      visibility: (json['visibility'] as num).toInt(),
-      wind: WindInfo.fromJson(json['wind'] as Map<String, dynamic>),
-      name: json['name'] as String,
+      MainInfo.fromJson(json['main'] as Map<String, dynamic>),
+      (json['visibility'] as num).toInt(),
+      WindInfo.fromJson(json['wind'] as Map<String, dynamic>),
+      json['name'] as String,
+      json['dt_txt'] as String?,
     );
 
 Map<String, dynamic> _$WeatherResponseDtoToJson(WeatherResponseDto instance) =>
@@ -24,4 +25,5 @@ Map<String, dynamic> _$WeatherResponseDtoToJson(WeatherResponseDto instance) =>
       'visibility': instance.visibility,
       'wind': instance.wind.toJson(),
       'name': instance.name,
+      'dt_txt': instance.dateTime,
     };

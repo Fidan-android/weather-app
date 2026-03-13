@@ -7,9 +7,9 @@ part of 'wind_info.dart';
 // **************************************************************************
 
 WindInfo _$WindInfoFromJson(Map<String, dynamic> json) => WindInfo(
-  (json['speed'] as num).toDouble(),
-  (json['deg'] as num).toDouble(),
-  (json['gust'] as num).toDouble(),
+  (json['speed'] as num?)?.toDouble(),
+  (json['deg'] as num?)?.toDouble(),
+  (json['gust'] as num?)?.toDouble(),
 );
 
 Map<String, dynamic> _$WindInfoToJson(WindInfo instance) => <String, dynamic>{

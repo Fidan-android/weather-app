@@ -6,4 +6,8 @@ enum Units {
   const Units(this.type);
 
   final String type;
+
+  factory Units.searchByType(String type) {
+    return values.firstWhere((unit) => unit.type == type);
+  }
 }

@@ -23,13 +23,17 @@ class WeatherResponseDto {
   @JsonKey(name: "name")
   final String name;
 
-  WeatherResponseDto({
-    required this.weather,
-    required this.main,
-    required this.visibility,
-    required this.wind,
-    required this.name,
-  });
+  @JsonKey(name: "dt_txt")
+  final String? dateTime;
+
+  WeatherResponseDto(
+    this.weather,
+    this.main,
+    this.visibility,
+    this.wind,
+    this.name,
+    this.dateTime,
+  );
 
   factory WeatherResponseDto.fromJson(Map<String, dynamic> json) {
     return _$WeatherResponseDtoFromJson(json);

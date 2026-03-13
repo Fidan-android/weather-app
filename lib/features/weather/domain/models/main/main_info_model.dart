@@ -1,10 +1,10 @@
 class MainInfoModel {
-  final double currentTemp; // Текущая температура
-  final double feelsLike; // Ощущается как
-  final String minTemp; // Минимальная темпераутра
-  final String maxTemp; //Максимальная температура
-  final double pressure; // Давление
-  final double humidity; // Влажность
+  final double? currentTemp; // Текущая температура
+  final double? feelsLike; // Ощущается как
+  final double? minTemp; // Минимальная темпераутра
+  final double? maxTemp; //Максимальная температура
+  final double? pressure; // Давление
+  final double? humidity; // Влажность
 
   MainInfoModel(
     this.currentTemp,

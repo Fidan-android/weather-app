@@ -8,9 +8,8 @@ class CityLoadingState extends CityState {}
 
 class CityDataState extends CityState {
   List<CityModel> cities = [];
-  CityModel? selectedCity;
 
-  CityDataState(this.cities, this.selectedCity);
+  CityDataState(this.cities);
 }
 
 class CityErrorState extends CityState {

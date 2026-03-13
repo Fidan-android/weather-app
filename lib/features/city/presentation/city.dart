@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:weather_app/features/city/data/providers/city_data_provider.dart';
 import 'package:weather_app/features/city/presentation/providers/city_provider.dart';
 import 'package:weather_app/features/city/presentation/state/city_state.dart';
 
@@ -18,13 +19,16 @@ class _CityScreenState extends ConsumerState<CityScreen> {
   @override
   void initState() {
     super.initState();
-    ref.read(cityControllerProvider.notifier).onInit();
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         ref.read(cityControllerProvider.notifier).onSearch(controller.text);
       } else {
         ref.read(cityControllerProvider.notifier).onClearSearch();
       }
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(cityControllerProvider.notifier).onInit();
     });
   }
 
@@ -56,14 +60,12 @@ class _CityScreenState extends ConsumerState<CityScreen> {
   }
 
   Widget _buildHeader(CityState cityState) {
-    if (cityState is CityDataState) {
-      final selectedCity = cityState.selectedCity;
-      if (selectedCity != null) {
-        return Text(
-          "Selected city: ${selectedCity.name}",
-          style: TextStyle(fontSize: 18),
-        );
-      }
+    final selectedCity = ref.watch(selectedCityProvider);
+    if (selectedCity != null) {
+      return Text(
+        "Selected city: ${selectedCity.name}",
+        style: TextStyle(fontSize: 18),
+      );
     }
     return Text("City", style: TextStyle(fontSize: 18));
   }

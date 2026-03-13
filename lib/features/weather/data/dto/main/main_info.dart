@@ -6,22 +6,22 @@ part 'main_info.g.dart';
 @JsonSerializable(explicitToJson: true)
 class MainInfo {
   @JsonKey(name: "temp")
-  final double currentTemp;
+  final double? currentTemp;
 
   @JsonKey(name: "feels_like")
-  final double feelsLike;
+  final double? feelsLike;
 
   @JsonKey(name: "temp_min")
-  final String minTemp;
+  final double? minTemp;
 
   @JsonKey(name: "temp_max")
-  final String maxTemp;
+  final double? maxTemp;
 
   @JsonKey(name: "pressure")
-  final double pressure;
+  final double? pressure;
 
   @JsonKey(name: "humidity")
-  final double humidity;
+  final double? humidity;
 
   MainInfo(
     this.currentTemp,

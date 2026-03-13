@@ -7,12 +7,12 @@ part of 'main_info.dart';
 // **************************************************************************
 
 MainInfo _$MainInfoFromJson(Map<String, dynamic> json) => MainInfo(
-  (json['temp'] as num).toDouble(),
-  (json['feels_like'] as num).toDouble(),
-  json['temp_min'] as String,
-  json['temp_max'] as String,
-  (json['pressure'] as num).toDouble(),
-  (json['humidity'] as num).toDouble(),
+  (json['temp'] as num?)?.toDouble(),
+  (json['feels_like'] as num?)?.toDouble(),
+  (json['temp_min'] as num?)?.toDouble(),
+  (json['temp_max'] as num?)?.toDouble(),
+  (json['pressure'] as num?)?.toDouble(),
+  (json['humidity'] as num?)?.toDouble(),
 );
 
 Map<String, dynamic> _$MainInfoToJson(MainInfo instance) => <String, dynamic>{

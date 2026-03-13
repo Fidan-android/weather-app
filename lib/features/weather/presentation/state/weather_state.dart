@@ -1,3 +1,4 @@
+import 'package:weather_app/core/enums/units.dart';
 import 'package:weather_app/features/weather/domain/models/weather_model.dart';
 
 sealed class WeatherState {}
@@ -13,8 +14,13 @@ class WeatherErrorState extends WeatherState {
 }
 
 class WeatherDataState extends WeatherState {
-  final WeatherModel weatherModel;
+  final Units unit;
   final bool isOffline;
+  final WeatherModel weatherModel;
 
-  WeatherDataState(this.weatherModel, {this.isOffline = false});
+  WeatherDataState(
+    this.weatherModel, {
+    this.isOffline = false,
+    this.unit = Units.metric,
+  });
 }

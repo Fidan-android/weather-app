@@ -6,13 +6,13 @@ part 'wind_info.g.dart';
 @JsonSerializable(explicitToJson: true)
 class WindInfo {
   @JsonKey(name: "speed")
-  final double speed; // Скорость
+  final double? speed; // Скорость
 
   @JsonKey(name: "deg")
-  final double deg; // Градус
+  final double? deg; // Градус
 
   @JsonKey(name: "gust")
-  final double gust; // Порыв
+  final double? gust; // Порыв
 
   WindInfo(this.speed, this.deg, this.gust);
 
