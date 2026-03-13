@@ -8,33 +8,37 @@ import 'package:weather_app/features/weather/presentation/state/weather_state.da
 class WeatherController extends Notifier<WeatherState> {
   @override
   WeatherState build() {
-    final selectedCity = ref.watch(selectedCityProvider);
-    if (selectedCity == null) {
-      return WeatherErrorState(
+    ref.listen(selectedCityProvider, (prev, next) {
+      if (next != null) {
+        _loadWeather();
+      }
+    });
+
+    ref.listen(selectedUnitProvider, (prev, next) {
+      _loadWeather();
+    });
+
+    Future.microtask(_loadWeather);
+    return WeatherInitState();
+  }
+
+  Future<void> _loadWeather() async {
+    final city = ref.read(selectedCityProvider);
+    final unit = ref.read(selectedUnitProvider);
+
+    if (city == null) {
+      state = WeatherErrorState(
         "Выберите город на вкладке Города для показа погоды",
       );
+      return;
     }
-    return WeatherLoadingState();
-  }
 
-  Future<void> onInit() async {
-    final repository = ref.read(weatherRepositoryProvider);
-    final selectedUnit = repository.onGetSelectedUnit();
-    ref.read(selectedUnitProvider.notifier).state = selectedUnit;
-
-    final selectedCity = ref.read(selectedCityProvider);
-    if (selectedCity != null) {
-      await _loadWeather(selectedCity, selectedUnit);
-    }
-  }
-
-  Future<void> _loadWeather(CityModel city, Units unit) async {
     final repository = ref.read(weatherRepositoryProvider);
     try {
       final weather = await repository.onGetWeather(
         city.latitude,
         city.longitude,
-        ref.read(selectedUnitProvider),
+        unit,
       );
       state = WeatherDataState(
         weather,
@@ -51,10 +55,5 @@ class WeatherController extends Notifier<WeatherState> {
     final repository = ref.read(weatherRepositoryProvider);
     ref.read(selectedUnitProvider.notifier).state = unit;
     await repository.onSelectUnit(unit);
-
-    final selectedCity = ref.read(selectedCityProvider);
-    if (selectedCity != null) {
-      await _loadWeather(selectedCity, unit);
-    }
   }
 }

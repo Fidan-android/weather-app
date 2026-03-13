@@ -21,7 +21,7 @@ class WeatherResponseDto {
   final WindInfo wind;
 
   @JsonKey(name: "name")
-  final String name;
+  final String? name;
 
   @JsonKey(name: "dt_txt")
   final String? dateTime;

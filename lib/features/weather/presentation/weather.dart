@@ -15,14 +15,6 @@ class WeatherScreen extends ConsumerStatefulWidget {
 
 class _WeatherScreenState extends ConsumerState<WeatherScreen> {
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(weatherControllerProvider.notifier).onInit();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final weatherState = ref.watch(weatherControllerProvider);
     return Column(

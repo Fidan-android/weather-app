@@ -1,23 +1,81 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weather_app/features/forecast/presentation/provider/forecast_provider.dart';
+import 'package:weather_app/features/forecast/presentation/state/forecast_state.dart';
+import 'package:weather_app/features/weather/domain/models/weather_model.dart';
 
-class ForecastScreen extends ConsumerWidget {
+class ForecastScreen extends ConsumerStatefulWidget {
   const ForecastScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
-      child: ListView.builder(
-        itemCount: 5,
-        itemBuilder: (ctx, index) {
-          return _forecastBlock();
-        },
-      ),
-    );
+  ConsumerState<ConsumerStatefulWidget> createState() => _ForecastScreenState();
+}
+
+class _ForecastScreenState extends ConsumerState<ForecastScreen> {
+  @override
+  void initState() {
+    super.initState();
+    /*WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(forecastControllerProvider.notifier).onInit();
+    });*/
   }
 
-  Widget _forecastBlock() {
+  @override
+  Widget build(BuildContext context) {
+    final forecastState = ref.watch(forecastControllerProvider);
+    return _buildBody(forecastState);
+  }
+
+  Widget _buildBody(ForecastState forecastState) {
+    if (forecastState is ForecastLoadingState) {
+      return Column(children: [CircularProgressIndicator()]);
+    }
+
+    if (forecastState is ForecastErrorState) {
+      return Column(
+        children: [Center(child: Text(forecastState.errorMessage))],
+      );
+    }
+
+    if (forecastState is ForecastDataState) {
+      return Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+              child: ListView.builder(
+                itemCount: forecastState.forecastModel.listOfWeather.length,
+                itemBuilder: (ctx, index) {
+                  final weather =
+                      forecastState.forecastModel.listOfWeather[index];
+                  return _forecastBlock(weather);
+                },
+              ),
+            ),
+          ),
+          if (forecastState.isOffline)
+            Container(
+              width: double.infinity,
+              color: Colors.deepOrangeAccent,
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text(
+                  "Нет интернет-соединения",
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+            ),
+        ],
+      );
+    }
+
+    return Column(children: [SizedBox.shrink()]);
+  }
+
+  Widget _forecastBlock(WeatherModel weather) {
+    final weatherInfo = weather.weather.first;
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Container(
@@ -26,11 +84,29 @@ class ForecastScreen extends ConsumerWidget {
           border: BoxBorder.all(color: Colors.grey),
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
-        child: Column(
+        child: Row(
           children: [
-            Icon(Icons.sunny, color: Colors.yellow),
-            Text("мин/макс температура"),
-            Text("Описание"),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Container(
+                color: Colors.blue,
+                child: CachedNetworkImage(
+                  fit: BoxFit.fitWidth,
+                  imageUrl: weatherInfo.icon ?? "",
+                  width: 80,
+                  height: 80,
+                  errorWidget: (_, _, _) => Icon(Icons.error),
+                ),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Мин температура: ${weather.main.minTemp}"),
+                Text("Макс температура: ${weather.main.maxTemp}"),
+                Text("Погода: ${weatherInfo.description}"),
+              ],
+            ),
           ],
         ),
       ),

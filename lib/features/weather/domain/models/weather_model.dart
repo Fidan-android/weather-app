@@ -7,7 +7,7 @@ class WeatherModel {
   final MainInfoModel main;
   final WindInfoModel wind;
   final int visibility; // Видимость
-  final String name; // Город
+  final String? name; // Город
 
   WeatherModel(this.weather, this.main, this.wind, this.visibility, this.name);
 }
