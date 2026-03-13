@@ -2,15 +2,18 @@
 
 Тестовое задание Wether App
 
-## Getting Started
+## Экран поиска городов
 
-This project is a starting point for a Flutter application.
+![История поиска по городам](/assets/readme/screen1.png)
 
-A few resources to get you started if this is your first Flutter project:
+## Экран текущей погоды
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+![История поиска по городам](/assets/readme/screen2.png)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Экран погоды за 5 дней
+
+![История поиска по городам](/assets/readme/screen3.png)
+
+## Экран с ошибкой об отсутствии интернет
+
+![История поиска по городам](/assets/readme/screen4.png)
