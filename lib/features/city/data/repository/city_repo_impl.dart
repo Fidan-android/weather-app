@@ -1,10 +1,10 @@
-import 'package:weather_app/features/city/data/datasource/city_db.dart';
+import 'package:weather_app/features/city/data/datasource/city_datasource.dart';
 import 'package:weather_app/features/city/data/dto/city/city_dto.dart';
 import 'package:weather_app/features/city/domain/models/city_model.dart';
 import 'package:weather_app/features/city/domain/repository/i_city_repo.dart';
 
 class CityRepoImpl implements ICityRepo {
-  final CityDb db;
+  final CityDataSource db;
 
   CityRepoImpl(this.db);
 

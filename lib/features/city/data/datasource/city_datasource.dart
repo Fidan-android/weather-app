@@ -5,17 +5,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_app/core/enums/shared_keys.dart';
 import 'package:weather_app/features/city/data/dto/city/city_dto.dart';
 
-class CityDb {
+class CityDataSource {
+  final SharedPreferences _prefs;
+
+  CityDataSource(this._prefs);
+
   final countOfHistory = 5;
   List<CityDto>? _cachedCities;
 
-  SharedPreferences? _prefs;
   List<CityDto> _historyCities = [];
-
-  Future _initPrefs() async {
-    if (_prefs != null) return;
-    _prefs = await SharedPreferences.getInstance();
-  }
 
   Future _loadCities() async {
     if (_cachedCities != null) return;
@@ -33,10 +31,9 @@ class CityDb {
         .toList();
   }
 
-  Future<List<CityDto>> onGetHistory() async {
-    await _initPrefs();
+  List<CityDto> onGetHistory() {
     if (_historyCities.isEmpty) {
-      final historyString = _prefs?.getStringList(SharedKeys.history.key) ?? [];
+      final historyString = _prefs.getStringList(SharedKeys.history.key) ?? [];
       _historyCities = historyString
           .map((e) => CityDto.fromJson(jsonDecode(e)))
           .toList();
@@ -52,11 +49,11 @@ class CityDb {
       _historyCities.add(city);
     }
 
-    await _prefs?.setString(
+    await _prefs.setString(
       SharedKeys.selectedCity.key,
       jsonEncode(city.toJson()),
     );
-    await _prefs?.setStringList(
+    await _prefs.setStringList(
       SharedKeys.history.key,
       _historyCities.map((e) => jsonEncode(e.toJson())).toList(),
     );
@@ -64,16 +61,14 @@ class CityDb {
 
   Future onRemoveCity(CityDto city) async {
     _historyCities.removeWhere((dto) => dto.name == city.name);
-    await _prefs?.setStringList(
+    await _prefs.setStringList(
       SharedKeys.history.key,
       _historyCities.map((e) => jsonEncode(e.toJson())).toList(),
     );
   }
 
-  Future<CityDto?> onGetSelectedCity() async {
-    await _initPrefs();
-    final jsonString = _prefs?.getString(SharedKeys.selectedCity.key) ?? "";
-    print(jsonString);
+  CityDto? onGetSelectedCity() {
+    final jsonString = _prefs.getString(SharedKeys.selectedCity.key) ?? "";
     if (jsonString.isEmpty) return null;
     return CityDto.fromJson(jsonDecode(jsonString));
   }
